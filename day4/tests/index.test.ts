@@ -1,6 +1,6 @@
 import { solvePartOne, solvePartTwo } from '../src/index'
 
-const dataFolder = '/mnt/c/Users/joshs/code/advent-of-code-2022-data/day3/data'
+const dataFolder = '/mnt/c/Users/joshs/code/advent-of-code-2022-data/day4/data'
 
 describe('test solvePartOne', () => {
     it('result should be 2 with sample data', async () => {

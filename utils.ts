@@ -7,3 +7,11 @@ export async function parseFileIntoArrayOfLines ( filename : any) {
 
     return fileInput.trim().split('\n')
 }
+
+export async function parseFileIntoArrayOfLinesNoTrim ( filename : any) {
+    let file = await fs.open(filename)
+    let fileInput = await file.readFile({ encoding: 'utf8'})
+    file.close()
+
+    return fileInput.split('\n')
+}

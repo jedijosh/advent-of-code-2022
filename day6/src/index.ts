@@ -1,7 +1,7 @@
 import { parseFileIntoArrayOfLines } from '../../utils'
 const dataFolder = '/mnt/c/Users/joshs/code/advent-of-code-2022-data/day6/data'
 
-const LOGGING = true
+const LOGGING = false
 
 export async function solution ( filename : string, moveOneAtATime: boolean) {
 
@@ -17,35 +17,53 @@ export async function solution ( filename : string, moveOneAtATime: boolean) {
         let letterToCheck = first3Letters.substring(i, i+1)
         if (LOGGING) console.log(`checking letter ${letterToCheck}`)
         let index = first3Letters.substring(0, i).indexOf(letterToCheck)
-        console.log(`index is ${index}`)
         if (index !== -1) {
             startPosition = index + 1
             if (LOGGING) console.log(`setting start position to ${startPosition}`)
         }
     }
-    console.log(`startPosition is ${startPosition}`)
+
+    let skippedMultiple = false
 
     while(!markerFound) {
         // TODO: Check if any of the letters in last 3 letters are duplicated
         let last3Letters = line.substring(startPosition, startPosition + 3)
-        let nextLetter = line.substring(startPosition + 3, startPosition + 4)
-        if (LOGGING) console.log(`searching for ${nextLetter} in ${last3Letters}`)
-        let index = last3Letters.indexOf(nextLetter)
-        console.log('index is:', index)
-        if (index === -1) {
-            markerFound = true
+
+        let duplicateIndex = await indexOfDuplicate(last3Letters)
+        if (duplicateIndex !== -1) {
+            startPosition = startPosition + duplicateIndex + 1
+            if (LOGGING) console.log(`found duplicates in substring, increasing start position to ${startPosition}`)
+            
         } else {
-            startPosition = startPosition + index + 1
-            console.log(line.substring(startPosition, startPosition + 1))
-            while(line.substring(startPosition, startPosition + 1) === nextLetter) {
-                console.log('increasing startPosition')
-                startPosition++
+            let nextLetter = line.substring(startPosition + 3, startPosition + 4)
+            if (LOGGING) console.log(`startPosition: ${startPosition}, searching for ${nextLetter} in ${last3Letters}`)
+            let index = last3Letters.indexOf(nextLetter)
+            if (index === -1) {
+                markerFound = true
+            } else {
+                startPosition = startPosition + index + 1
+                if (index > 0) skippedMultiple = true
+                if (LOGGING) console.log(`starting next search at ${startPosition}`)
             }
-            if (LOGGING) console.log(`starting next search at ${startPosition}`)
         }
     }
 
     return startPosition + 4
+}
+
+async function indexOfDuplicate ( stringToCheck: string ) {
+    if (LOGGING) console.log(`checking for duplicates in ${stringToCheck}`)
+    let newIndex = -1
+    for (let i = 1; i < stringToCheck.length; i++) {
+        let letterToCheck = stringToCheck.substring(i, i+1)
+        if (LOGGING) console.log(`checking letter ${letterToCheck}`)
+        let index = stringToCheck.substring(0, i).indexOf(letterToCheck)
+        if (index !== -1) {
+            newIndex = index
+            if (LOGGING) console.log(`setting start position to ${index}`)
+        }
+    }
+    return newIndex
 }
 
 export async function solvePartTwo ( filename : string) {

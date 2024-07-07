@@ -28,10 +28,10 @@ describe('test solvePartOne', () => {
         expect(partOneAnswer).toBe(11)
     })
     
-    // test('result should be FJSRQCFTN with my data', async () => {
-    //     let partOneAnswer = await solution(dataFolder + '/input.txt', true)
-    //     expect(partOneAnswer).toBe('FJSRQCFTN')
-    // })
+    test('result should be 1953 with my data', async () => {
+        let partOneAnswer = await solution(dataFolder + '/input.txt', true)
+        expect(partOneAnswer).toBe(1953)
+    })
     
     // test('part 2 result should be MCD with sample data', async () => {
     //     let partTwoAnswer = await solution(dataFolder + '/tests/input.txt', false)

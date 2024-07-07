@@ -1,17 +1,14 @@
 const fs = require('node:fs/promises')
 
-export async function parseFileIntoArrayOfLines ( filename : any) {
+export async function parseFileIntoArrayOfLines ( filename : any, trimInput: boolean = true) {
     let file = await fs.open(filename)
     let fileInput = await file.readFile({ encoding: 'utf8'})
     file.close()
 
-    return fileInput.trim().split('\n')
-}
-
-export async function parseFileIntoArrayOfLinesNoTrim ( filename : any) {
-    let file = await fs.open(filename)
-    let fileInput = await file.readFile({ encoding: 'utf8'})
-    file.close()
-
-    return fileInput.split('\n')
+    if (trimInput) {
+        return fileInput.trim().split('\n')
+    } else {
+        return fileInput.split('\n')
+    }
+    
 }

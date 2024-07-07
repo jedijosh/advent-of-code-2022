@@ -1,11 +1,11 @@
-import { parseFileIntoArrayOfLinesNoTrim } from '../../utils'
+import { parseFileIntoArrayOfLines } from '../../utils'
 const dataFolder = '/mnt/c/Users/joshs/code/advent-of-code-2022-data/day5/data'
 
 const LOGGING = false
 
 export async function solution ( filename : string, moveOneAtATime: boolean) {
 
-    let fileLines : string[] = await parseFileIntoArrayOfLinesNoTrim(filename)
+    let fileLines : string[] = await parseFileIntoArrayOfLines(filename, false)
         
     let totalSum: number = 0
     let lineNumber = 0
@@ -71,37 +71,6 @@ export async function solution ( filename : string, moveOneAtATime: boolean) {
     }
         
     return answerString
-}
-
-async function convertInputToArrays( ) {
-    
-}
-
-export async function solvePartTwo ( filename : string) {
-
-    let fileLines : string[] = await parseFileIntoArrayOfLinesNoTrim(filename)
-        
-    let totalSum: number = 0
-    for (let lineNumber = 0; lineNumber < fileLines.length; lineNumber++) {
-        let elfAssignments = fileLines[lineNumber].split(',')
-        const firstElfAssignment = elfAssignments[0].split('-')
-        const secondElfAssignment = elfAssignments[1].split('-')
-        const firstAssignmentStart = Number(firstElfAssignment[0])
-        const firstAssignmentEnd = Number(firstElfAssignment[1])
-        const secondAssignmentStart = Number(secondElfAssignment[0])
-        const secondAssignmentEnd = Number(secondElfAssignment[1])
-
-        if (firstAssignmentStart >= secondAssignmentStart && firstAssignmentStart <= secondAssignmentEnd) {
-            totalSum++
-        } else if (secondAssignmentStart >= firstAssignmentStart && secondAssignmentStart <= firstAssignmentEnd) {
-            totalSum++
-        }  else if (firstAssignmentEnd <= secondAssignmentStart && firstAssignmentEnd >= secondAssignmentEnd) {
-            totalSum++
-        }  else if (secondAssignmentEnd <= firstAssignmentStart && secondAssignmentEnd >= firstAssignmentEnd) {
-            totalSum++
-        }
-    }
-    return totalSum
 }
 
 // solution(dataFolder + '/tests/input.txt', true)

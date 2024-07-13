@@ -3,7 +3,7 @@ const dataFolder = '/mnt/c/Users/joshs/code/advent-of-code-2022-data/day6/data'
 
 const LOGGING = false
 
-export async function solution ( filename : string, moveOneAtATime: boolean) {
+export async function solution ( filename : string, numberOfCharactersToCheck: number) {
 
     let fileLines : string[] = await parseFileIntoArrayOfLines(filename, true)
         
@@ -11,69 +11,44 @@ export async function solution ( filename : string, moveOneAtATime: boolean) {
     let markerFound = false
     let line = fileLines[0]
     if (LOGGING) console.log('line', line)
-    // Find starting position.  Make sure the first 3 letters don't have any duplicates
-    const first3Letters: string = line.substring(0, 3)
-    for (let i = 1; i < first3Letters.length; i++) {
-        let letterToCheck = first3Letters.substring(i, i+1)
-        if (LOGGING) console.log(`checking letter ${letterToCheck}`)
-        let index = first3Letters.substring(0, i).indexOf(letterToCheck)
-        if (index !== -1) {
-            startPosition = index + 1
-            if (LOGGING) console.log(`setting start position to ${startPosition}`)
-        }
-    }
-
-    let skippedMultiple = false
 
     while(!markerFound) {
         // TODO: Check if any of the letters in last 3 letters are duplicated
-        let last3Letters = line.substring(startPosition, startPosition + 3)
+        let lettersToCheck = line.substring(startPosition, startPosition + numberOfCharactersToCheck)
 
-        let duplicateIndex = await indexOfDuplicate(last3Letters)
+        let duplicateIndex = await indexOfDuplicate(lettersToCheck)
         if (duplicateIndex !== -1) {
             startPosition = startPosition + duplicateIndex + 1
             if (LOGGING) console.log(`found duplicates in substring, increasing start position to ${startPosition}`)
             
         } else {
-            let nextLetter = line.substring(startPosition + 3, startPosition + 4)
-            if (LOGGING) console.log(`startPosition: ${startPosition}, searching for ${nextLetter} in ${last3Letters}`)
-            let index = last3Letters.indexOf(nextLetter)
-            if (index === -1) {
-                markerFound = true
-            } else {
-                startPosition = startPosition + index + 1
-                if (index > 0) skippedMultiple = true
-                if (LOGGING) console.log(`starting next search at ${startPosition}`)
-            }
+            markerFound = true
         }
     }
 
-    return startPosition + 4
+    return startPosition + numberOfCharactersToCheck
 }
 
 async function indexOfDuplicate ( stringToCheck: string ) {
     if (LOGGING) console.log(`checking for duplicates in ${stringToCheck}`)
-    let newIndex = -1
-    for (let i = 1; i < stringToCheck.length; i++) {
+    let duplicateIndex = -1
+    // Iterate through each letter of stringToCheck.  Check the remainder of the string to see if the letter is present.
+    // If the letter is duplicated in the string, the next search should exclude the second-to-last instance of the duplicate.
+    for (let i = 0; i < stringToCheck.length - 1; i++) {
         let letterToCheck = stringToCheck.substring(i, i+1)
-        if (LOGGING) console.log(`checking letter ${letterToCheck}`)
-        let index = stringToCheck.substring(0, i).indexOf(letterToCheck)
-        if (index !== -1) {
-            newIndex = index
-            if (LOGGING) console.log(`setting start position to ${index}`)
+        if (LOGGING) console.log(`checking letter ${letterToCheck} in ${stringToCheck.substring(i+1)}`)
+        // The current letter at i is duplicated.  Set the duplicate index so the next search starts at the next letter.
+        if (stringToCheck.substring(i+1).indexOf(letterToCheck) !== -1) {
+            duplicateIndex = i
+            if (LOGGING) console.log(`setting duplicate position to ${duplicateIndex}`)
         }
     }
-    return newIndex
+    return duplicateIndex
 }
 
-export async function solvePartTwo ( filename : string) {
+solution(dataFolder + '/tests/input2.txt', 4)
+// solution(dataFolder + '/input.txt', 4)
 
-    
-}
-
-// solution(dataFolder + '/tests/input.txt', true)
-solution(dataFolder + '/input.txt', true)
-
-// solution(dataFolder + '/tests/input.txt', true)
-// solution(dataFolder + '/input.txt', true)
+// solution(dataFolder + '/tests/input.txt', 14)
+// solution(dataFolder + '/input.txt', 14)
     .then(answer => console.log('answer:', answer))

@@ -12,3 +12,7 @@ export async function parseFileIntoArrayOfLines ( filename : any, trimInput: boo
     }
     
 }
+
+export function getDayNumber () {
+    return process.cwd().split('/').pop()
+}

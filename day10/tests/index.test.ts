@@ -1,6 +1,6 @@
-import { solution, isAdjacent } from '../src/index'
+import { solution } from '../src/index'
 
-import { parseFileIntoArrayOfLines, getDayNumber } from '../../utils'
+import { getDayNumber } from '../../utils'
 const dayNumber = getDayNumber()
 const dataFolder = `/mnt/c/Users/joshs/code/advent-of-code-2022-data/${dayNumber}/data`
 
@@ -10,10 +10,10 @@ describe('test solvePartOne', () => {
         expect(answer).toBe(13140)
     })
     
-    // test('result should be 5619 with my data', async () => {
-    //     let answer = await solution(dataFolder + '/input.txt', 1)
-    //     expect(answer).toBe(5619)
-    // })
+    test('result should be 16020 with my data', async () => {
+        let answer = await solution(dataFolder + '/input.txt', 1)
+        expect(answer).toBe(16020)
+    })
     
     // it('part 2 result should be 1 with sample data', async () => {
     //     let answer = await solution(dataFolder + '/tests/input.txt', 2)
